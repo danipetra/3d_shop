@@ -26,7 +26,7 @@ const Preview = ({selectedProduct}:PreviewProps) => {
     const sceneWidth = containerWidth < 1536 ? containerWidth : 1536;
     const sceneHeight = window.innerWidth <= window.innerHeight ? window.innerWidth : window.innerHeight;
 
-    scene.rotation.x = 3;
+    scene.rotation.x = 1;
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(sceneWidth, sceneHeight);
