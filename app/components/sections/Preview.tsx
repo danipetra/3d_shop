@@ -3,12 +3,19 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import {GLTFLoader} from 'three/examples/jsm/Addons.js';
+import { ProductType } from './Catalog';
 
-const Preview = () => {
+interface PreviewProps {
+  selectedProduct: ProductType;
+}
+
+const Preview = ({selectedProduct}:PreviewProps) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const modelRef = useRef<THREE.Object3D | null>(null);
+
   useEffect(() => {
     const mount = mountRef.current;
-    if(!mount) return;
+    if(!mount || !selectedProduct) return;
 
     const loader = new GLTFLoader();
 
@@ -41,42 +48,60 @@ const Preview = () => {
     directionalLightRight.position.set(10, 5, 0);
     scene.add(directionalLightRight);
 
-    loader.load('/assets/keyboard.glb', (gltf) =>{
-      const model = gltf.scene;
-      model.scale.set(1,1,1);
-      model.position.set(0,0,-2);
-      scene.add(model);
-    })
+    const loadModel = (modelSrc: string) =>{
+      loader.load(modelSrc, (gltf) =>{
+        if(modelRef.current){
+          scene.remove(modelRef.current);
+        }
+        const model = gltf.scene;
+        model.scale.set(1,1,1);
+        model.position.set(0,12,-2);
+        scene.add(model);
+
+        modelRef.current = model;
+      })
+    }
+
+    loadModel(selectedProduct.modelSrc);
 
     camera.position.z = 5;
 
-    // const geometry = new THREE.BoxGeometry(1,1,1);
-    // const material = new THREE.MeshBasicMaterial({color: 0xff00});
-
-    // for(let i=0; i<10; i++){
-
-    //   const cube = new THREE.Mesh({geometry, material});
-    //   cube.position.set(
-    //     (Math.random() - 0.5) * 10,
-    //     (Math.random() - 0.5) * 10,
-    //     (Math.random() - 0.5) * 10
-    //   );
-    //   scene.add(cube);
-    // }
-
-    renderer.setAnimationLoop(animate);
-
+    const gravity = 0.002;
+    const bouncefactor = 0.3;
+    let groundY = 0;
+    let velocityY = 0;
+    let isBouncing = false;
     function animate(){
-      // scene.traverse((object) => {
-      //   if(object instanceof THREE.Mesh){  
-      //     object.rotation.x += 0.01;
-      //     object.rotation.y += 0.01;
-      //   }
-      // });
-      
+      requestAnimationFrame(animate);
+
+      if(modelRef.current){
+        velocityY -= gravity;
+        modelRef.current.position.y += velocityY;
+        
+        if(modelRef.current.position.y <= groundY){
+          modelRef.current.position.y = groundY;
+          velocityY *= bouncefactor;
+          isBouncing = true;
+        }else{
+          isBouncing = false;
+        }
+      }
+
+      if(Math.abs(velocityY) < 0.01 && isBouncing){
+        velocityY = 0;
+      }
       renderer.render(scene,camera);
     }
-  })
+
+    animate();
+
+    return () =>{
+      if(mount){
+        mount.removeChild(renderer.domElement);
+      }
+    }
+
+  }, [selectedProduct]); //useEffect re-renders on selected product change
 
   return (
     <div ref={mountRef} className='w-full h-[400px] md:h-[800px] pt-8 md:pt-0'/> //Attaching the scene to this div
