@@ -13,6 +13,8 @@ const Preview = ({selectedProduct}:PreviewProps) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const modelRef = useRef<THREE.Object3D | null>(null);
 
+  const isMouseDownRef = useRef<Boolean>(false);
+
   useEffect(() => {
     const mount = mountRef.current;
     if(!mount || !selectedProduct) return;
@@ -94,11 +96,52 @@ const Preview = ({selectedProduct}:PreviewProps) => {
     }
 
     animate();
+    
+    const handleMouseMove =  (event: MouseEvent) => {
+      if(modelRef.current && isMouseDownRef.current){
+        const mouseX = (event.clientX / window.innerWidth) * 2 -1;
+        modelRef.current.rotation.y = mouseX * Math.PI;
+      }
+    }
+
+    const handleMouseDown = () => {
+      isMouseDownRef.current = true;
+    }
+
+    const handleInteractionEnd = () => {
+      isMouseDownRef.current = false;
+
+      const animateRotationBack = () => {
+        if(modelRef.current){
+          const modelRotation = modelRef.current.rotation.y;
+          if(Math.abs(modelRotation) > 0.01){
+            modelRef.current.rotation.y -= (modelRotation * 0.01);
+            requestAnimationFrame(animateRotationBack);
+          }else{
+            modelRef.current.rotation.y = 0;
+          }
+        }
+      }
+
+      animateRotationBack();
+    }
+
+    mount.addEventListener('mousemove', handleMouseMove);
+    mount.addEventListener('mousedown', handleMouseDown);
+    mount.addEventListener('mouseup', handleInteractionEnd);
+    mount.addEventListener('mouseleave', handleInteractionEnd);
 
     return () =>{
       if(mount){
         mount.removeChild(renderer.domElement);
       }
+
+      
+        mount.removeEventListener('mousemove', handleMouseMove);
+        mount.removeEventListener('mousedown', handleMouseDown);
+        mount.removeEventListener('mouseup', handleInteractionEnd);
+        mount.removeEventListener('mouseleave', handleInteractionEnd);
+        
     }
 
   }, [selectedProduct]); //useEffect re-renders on selected product change
