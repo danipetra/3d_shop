@@ -68,11 +68,13 @@ const Preview = ({selectedProduct}:PreviewProps) => {
 
     camera.position.z = 5;
 
-    const gravity = 0.002;
+    const gravity = 0.00025;
     const bouncefactor = 0.3;
     let groundY = 0;
     let velocityY = 0;
     let isBouncing = false;
+    
+    //FIXME bouncing not working as expected
     function animate(){
       requestAnimationFrame(animate);
 
