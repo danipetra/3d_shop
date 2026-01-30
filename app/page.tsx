@@ -15,7 +15,7 @@ export default function Home(){
             <Products/>
             <Features/>
             <Reviews/>
-            <div className="bg-stone-100">
+            <div className="bg-stone-800">
                 <Sale/>
                 <Footer/>
             </div>
