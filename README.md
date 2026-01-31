@@ -1,3 +1,37 @@
+# Introduction
+Interactive e-commerce product page with real-time 3D preview and customization, built with Next.js, React, Three.js and Tailwind CSS.
+
+Users can explore a product through a dynamic landing page, navigate animated sections, and preview a customizable mechanical keyboard rendered in 3D. The application focuses on performance, modular UI architecture, and smooth user experience.
+
+The project combines traditional front-end development with real-time graphics to demonstrate how 3D visualization can enhance product presentation in web-based e-commerce.
+
+<img width="1583" height="893" alt="image" src="https://github.com/user-attachments/assets/f15f8d5a-54e4-4b89-91a3-b1bc8de54ddb" />
+
+## Features
+- Real-time 3D product preview using Three.js and R3F
+- Modular React components and reusable UI sections
+- Animated UI elements and smooth scroll navigation
+- Responsive layout for desktop and mobile
+- Custom product color variations and visual states
+- Modern UI built with Tailwind CSS
+- App Router architecture with Next.js
+
+## Tech Stack
+- Next.js (App Router)
+- React
+- Three.js
+- @react-three/fiber
+- Tailwind CSS
+- React Icons
+
+## Goals
+- Explore the integration of real-time 3D graphics into e-commerce experiences  
+- Practice component-driven UI architecture  
+- Build a portfolio-ready interactive product page  
+- Experiment with animation, layout composition, and visual hierarchy
+
+This project is a front-end focused prototype and does not include backend logic, authentication, or payments.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
