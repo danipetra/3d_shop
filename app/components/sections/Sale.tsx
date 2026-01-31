@@ -56,8 +56,11 @@ const Sale = () => {
   ];
 
   return (
-    <div className='flex flex-col container items-center gap-8 pt-32 mx-auto relative'>
-      <div ref={mountRef} className='absolute w-full h-screen lg:h-[150vh] top-0 md:top-[60vh] left-0'>
+    <div className="relative z-10 flex flex-col container items-center gap-8 pt-32 pb-24 mx-auto">
+      <div
+        ref={mountRef}
+        className="absolute inset-0 w-full h-[140vh] md:h-[160vh] -top-24 left-0 pointer-events-none z-10"
+      >
         <Canvas camera={{position:[0, 0, 5], fov:75}} className='w-full h-full'>
           <ambientLight intensity={0.5}/>
           <directionalLight position={[5,5,5]} intensity={3}/>
